@@ -3,7 +3,6 @@ import { Plus, Sparkles, Layers, TrendingUp, Copy, Award, BarChart3, Eye } from 
 import { Loading, useAsync } from '../components/Loading';
 import { fetchPrompts } from '../lib/services';
 import { motion } from 'framer-motion';
-import type { Prompt } from '../types';
 import {
   BarChart,
   Bar,
@@ -196,7 +195,7 @@ export default function Admin() {
                       dataKey="value"
                       stroke="none"
                     >
-                      {diffData.map((entry, index) => (
+                      {diffData.map((_entry, index) => (
                         <Cell key={`cell-${index}`} fill={DIFF_COLORS[index % DIFF_COLORS.length]} />
                       ))}
                     </Pie>
