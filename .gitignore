@@ -36,3 +36,6 @@ npm-debug.log*
 
 # Node lock files
 package-lock.json
+
+# Scripts
+seed_prompts.ps1
