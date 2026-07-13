@@ -15,6 +15,10 @@ import { extractVariables } from '../lib/variableEngine';
 import ImageUpload from '../components/ImageUpload';
 import type { Prompt, PromptMedia } from '../types';
 
+interface PromptInput extends Partial<Prompt> {
+  admin_id?: string;
+}
+
 function slugify(text: string): string {
   return text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
 }
@@ -117,7 +121,7 @@ export default function PromptForm() {
     }
     setSaving(true);
     try {
-      const payload: Partial<Prompt> = {
+      const payload: PromptInput = {
         title: form.title.trim(),
         slug: form.slug.trim() || slugify(form.title),
         description: form.description?.trim() || null,

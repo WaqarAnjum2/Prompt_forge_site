@@ -11,8 +11,6 @@ import {
   ArrowRight,
   Star,
   Quote,
-  Layers,
-  Eye,
   ChevronDown,
   SlidersHorizontal,
 } from 'lucide-react';

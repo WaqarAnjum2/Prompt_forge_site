@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
-import { Sparkles, Copy, Check, Clock, Search, Layers, MessageSquare, Filter } from 'lucide-react';
+import { Sparkles, Copy, Check, Clock, Search, Layers, MessageSquare } from 'lucide-react';
 import { fetchPromptOutputs, fetchCategories } from '../lib/services';
 import type { Category } from '../types';
 

@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react';
-import { Upload, X, Image as ImageIcon, Trash2, AlertCircle, Check } from 'lucide-react';
+import { Upload, X, Trash2, AlertCircle } from 'lucide-react';
 import { uploadFile, deleteFile } from '../lib/github';
 import { createPromptMedia, deletePromptMedia } from '../lib/services';
 import type { PromptMedia } from '../types';

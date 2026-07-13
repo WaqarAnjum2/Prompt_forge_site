@@ -1,25 +1,12 @@
 import { Link } from 'react-router-dom';
 import { Plus, Sparkles, Layers, TrendingUp, Copy, Award, BarChart3, Eye } from 'lucide-react';
 import { Loading, useAsync } from '../components/Loading';
-import { useToast } from '../components/Toast';
-import { fetchPrompts, deletePrompt } from '../lib/services';
+import { fetchPrompts } from '../lib/services';
 import { motion } from 'framer-motion';
 import type { Prompt } from '../types';
 
 export default function Admin() {
-  const { data: prompts, loading, error, refetch } = useAsync(() => fetchPrompts({ orderBy: 'popularity' }), []);
-  const { toast } = useToast();
-
-  const handleDelete = async (id: string) => {
-    if (!confirm('Delete this prompt? This cannot be undone.')) return;
-    try {
-      await deletePrompt(id);
-      refetch();
-      toast('Prompt deleted', 'success');
-    } catch (err) {
-      toast(err instanceof Error ? err.message : 'Failed to delete', 'error');
-    }
-  };
+  const { data: prompts, loading, error } = useAsync(() => fetchPrompts({ orderBy: 'popularity' }), []);
 
   if (loading) return <Loading label="Loading dashboard" />;
 

@@ -41,7 +41,7 @@ export default function AdminSettings() {
   const [general, setGeneral] = useState<GeneralSettings>(defaultGeneral);
   const [github, setGithub] = useState<GithubSettings>(defaultGithub);
   const [seo, setSeo] = useState<SeoSettings>(defaultSeo);
-  const [security, setSecurity] = useState<SecuritySettings>(defaultSecurity);
+  const [, setSecurity] = useState<SecuritySettings>(defaultSecurity);
   const [showGithubKey, setShowGithubKey] = useState(false);
   const [showWebhook, setShowWebhook] = useState(false);
 

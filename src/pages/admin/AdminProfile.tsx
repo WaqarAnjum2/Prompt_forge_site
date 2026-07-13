@@ -15,7 +15,6 @@ import {
   Loader2,
   AlertTriangle,
   Lock,
-  Info,
 } from 'lucide-react';
 import { useAuth } from '../../lib/auth';
 import { useToast } from '../../components/Toast';

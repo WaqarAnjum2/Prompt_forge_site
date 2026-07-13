@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo, useCallback } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import {
   Plus,
   Edit2,
@@ -10,7 +10,6 @@ import {
   ChevronRight,
   Sparkles,
   Layers,
-  TrendingUp,
   Copy,
   Image,
   Tag,
@@ -29,7 +28,6 @@ interface PromptWithMedia extends Prompt {
 }
 
 export default function AdminPrompts() {
-  const navigate = useNavigate();
   const { toast } = useToast();
   const [allPrompts, setAllPrompts] = useState<PromptWithMedia[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
