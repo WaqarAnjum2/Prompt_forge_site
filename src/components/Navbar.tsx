@@ -1,10 +1,12 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useState, useEffect, useRef } from 'react';
-import { Menu, X, LayoutDashboard, LogOut, User, ChevronDown, Search, List, Plus, FolderTree, Settings, Terminal } from 'lucide-react';
+import { Menu, X, LayoutDashboard, LogOut, User, ChevronDown, Search, List, Plus, FolderTree, Settings, Terminal, Sun, Moon } from 'lucide-react';
 import { useAuth } from '../lib/auth';
+import { useTheme } from '../lib/theme';
 import { AnimatePresence, motion } from 'framer-motion';
 
 export default function Navbar() {
+  const { theme, toggle: toggleTheme } = useTheme();
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [adminDropdown, setAdminDropdown] = useState(false);
@@ -154,6 +156,13 @@ export default function Navbar() {
               </AnimatePresence>
             </div>
           )}
+          <button
+            onClick={toggleTheme}
+            className="p-2 border border-cyber-border text-cyber-fg-soft hover:text-cyber-accent hover:border-cyber-accent hover:shadow-[0_0_10px_#00ff8840] transition-all duration-300 cyber-chamfer-sm mr-1"
+            aria-label="Toggle theme"
+          >
+            {theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+          </button>
           <Link to="/categories" className="cyber-btn-solid text-xs py-2 px-4 cyber-chamfer-sm">
             Browse Library
           </Link>
@@ -200,6 +209,16 @@ export default function Navbar() {
                   </button>
                 </>
               )}
+              <div className="flex items-center justify-between px-4 py-2 mt-2 border border-cyber-border cyber-chamfer-sm">
+                <span className="text-xs font-mono uppercase tracking-wider text-cyber-fg-soft">THEME: {theme.toUpperCase()}</span>
+                <button
+                  onClick={toggleTheme}
+                  className="p-1.5 border border-cyber-border text-cyber-fg-soft hover:text-cyber-accent hover:border-cyber-accent transition-all duration-300 cyber-chamfer-sm"
+                  aria-label="Toggle theme"
+                >
+                  {theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+                </button>
+              </div>
               <Link to="/categories" className="cyber-btn-solid text-xs cyber-chamfer-sm mt-2 text-center">Browse Library</Link>
             </div>
           </motion.div>

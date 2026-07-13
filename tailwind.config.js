@@ -4,18 +4,17 @@ export default {
   theme: {
     extend: {
       colors: {
-        // Cyberpunk palette
         cyber: {
-          bg: '#0a0a0f',
-          card: '#12121a',
-          muted: '#1c1c2e',
-          border: '#2a2a3a',
-          fg: '#e0e0e0',
-          'fg-soft': '#6b7280',
-          accent: '#00ff88',
-          secondary: '#ff00ff',
-          tertiary: '#00d4ff',
-          danger: '#ff3366',
+          bg: 'var(--cyber-bg)',
+          card: 'var(--cyber-card)',
+          muted: 'var(--cyber-muted)',
+          border: 'var(--cyber-border)',
+          fg: 'var(--cyber-fg)',
+          'fg-soft': 'var(--cyber-fg-soft)',
+          accent: 'var(--cyber-accent)',
+          secondary: 'var(--cyber-secondary)',
+          tertiary: 'var(--cyber-tertiary)',
+          danger: 'var(--cyber-danger)',
         },
         // Legacy palette (admin pages)
         bg: { DEFAULT: '#FBEFEF', surface: '#FFE2E2', elevated: '#F5CBCB' },

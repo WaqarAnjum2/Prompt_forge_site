@@ -9,6 +9,8 @@ import { AuthProvider } from './lib/auth';
 import ProtectedRoute from './components/ProtectedRoute';
 import AdminLayout from './components/AdminLayout';
 
+import { ThemeProvider } from './lib/theme';
+
 const Home = lazy(() => import('./pages/Home'));
 const PromptDetail = lazy(() => import('./pages/PromptDetail'));
 const PromptOutputs = lazy(() => import('./pages/PromptOutputs'));
@@ -65,7 +67,7 @@ function AppShell() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="cyber-page cyber-scanlines min-h-screen flex flex-col">
       <Navbar />
       <main className="flex-1 pt-20">
         <Suspense fallback={<PageLoader />}>
@@ -95,10 +97,12 @@ export default function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
-        <ToastProvider>
-          <ScrollToTop />
-          <AppShell />
-        </ToastProvider>
+        <ThemeProvider>
+          <ToastProvider>
+            <ScrollToTop />
+            <AppShell />
+          </ToastProvider>
+        </ThemeProvider>
       </AuthProvider>
     </BrowserRouter>
   );

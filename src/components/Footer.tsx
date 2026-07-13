@@ -40,7 +40,7 @@ export default function Footer() {
             ]},
             { title: 'Platform', links: [
               { to: '/contact', label: 'Contact' }, { to: '/privacy', label: 'Privacy Policy' },
-              { to: '/terms', label: 'Terms of Service' }, { to: '/admin', label: 'Admin Dashboard' },
+              { to: '/terms', label: 'Terms of Service' },
             ]},
             { title: 'Resources', links: [
               { to: '#', label: 'Documentation' }, { to: '#', label: 'API Reference' },
