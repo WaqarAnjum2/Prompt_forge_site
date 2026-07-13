@@ -1,0 +1,38 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+
+# Env files (contains secrets - NEVER commit!)
+.env
+.env.local
+.env.example
+.env.production
+.env.development
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+
+# TypeScript
+*.tsbuildinfo
+
+# SQL files
+*.sql
+
+# Markdown files
+*.md
+
+# Node lock files
+package-lock.json
