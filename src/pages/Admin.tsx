@@ -4,6 +4,35 @@ import { Loading, useAsync } from '../components/Loading';
 import { fetchPrompts } from '../lib/services';
 import { motion } from 'framer-motion';
 import type { Prompt } from '../types';
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  Tooltip,
+  ResponsiveContainer,
+  PieChart,
+  Pie,
+  Cell,
+  CartesianGrid
+} from 'recharts';
+
+const COLORS = ['#8b5cf6', '#a855f7', '#d946ef', '#ec4899', '#f43f5e', '#f97316', '#eab308', '#10b981', '#14b8a6', '#06b6d4'];
+const DIFF_COLORS = ['#10b981', '#f59e0b', '#f43f5e']; // Beginner, Intermediate, Advanced
+
+const CustomTooltip = ({ active, payload, label }: any) => {
+  if (active && payload && payload.length) {
+    return (
+      <div className="bg-white/90 backdrop-blur-md rounded-xl p-3 shadow-xl border border-white/40">
+        {label && <p className="text-sm font-semibold text-ink mb-1 max-w-[200px] truncate">{label}</p>}
+        <p className="text-xs font-medium text-brand-dark">
+          {payload[0].name}: {payload[0].value}
+        </p>
+      </div>
+    );
+  }
+  return null;
+};
 
 export default function Admin() {
   const { data: prompts, loading, error } = useAsync(() => fetchPrompts({ orderBy: 'popularity' }), []);
@@ -14,8 +43,11 @@ export default function Admin() {
   const totalCopies = (prompts ?? []).reduce((sum, p) => sum + p.popularity, 0);
   const avgPopularity = totalPrompts > 0 ? Math.round(totalCopies / totalPrompts) : 0;
 
-  const topPrompts = [...(prompts ?? [])].sort((a, b) => b.popularity - a.popularity).slice(0, 5);
-  const maxPopularity = topPrompts[0]?.popularity ?? 1;
+  const topPrompts = [...(prompts ?? [])].sort((a, b) => b.popularity - a.popularity).slice(0, 5).map(p => ({
+    name: p.title,
+    Usage: p.popularity,
+    slug: p.slug
+  }));
 
   const catCounts = new Map<string, number>();
   const catNames = new Map<string, string>();
@@ -29,14 +61,16 @@ export default function Admin() {
     }
   });
   const catData = Array.from(catCounts.entries())
-    .map(([id, count]) => ({ name: catNames.get(id) ?? 'Uncategorized', count, slug: catSlugs.get(id) ?? '' }))
-    .sort((a, b) => b.count - a.count);
-  const maxCatCount = catData[0]?.count ?? 1;
+    .map(([id, count]) => ({ name: catNames.get(id) ?? 'Uncategorized', Prompts: count, slug: catSlugs.get(id) ?? '' }))
+    .sort((a, b) => b.Prompts - a.Prompts);
 
   const diffCounts = { Beginner: 0, Intermediate: 0, Advanced: 0 };
   (prompts ?? []).forEach((p) => { if (p.difficulty in diffCounts) diffCounts[p.difficulty as keyof typeof diffCounts]++; });
-  const diffTotal = totalPrompts || 1;
-  const maxDiff = Math.max(...Object.values(diffCounts), 1);
+  const diffData = [
+    { name: 'Beginner', value: diffCounts.Beginner },
+    { name: 'Intermediate', value: diffCounts.Intermediate },
+    { name: 'Advanced', value: diffCounts.Advanced }
+  ].filter(d => d.value > 0);
 
   const tagCounts = new Map<string, number>();
   (prompts ?? []).forEach((p) => p.tags?.forEach((t: string) => tagCounts.set(t, (tagCounts.get(t) ?? 0) + 1)));
@@ -103,84 +137,97 @@ export default function Admin() {
         <>
           <div className="grid lg:grid-cols-2 gap-6">
             {/* Top 5 Prompts by Usage */}
-            <div className="bg-white/50 backdrop-blur rounded-2xl p-6 border border-white/40">
+            <div className="bg-white/50 backdrop-blur rounded-2xl p-6 border border-white/40 flex flex-col h-[400px]">
               <h3 className="font-display font-semibold mb-6 flex items-center gap-2">
                 <Award className="w-5 h-5 text-brand-dark" /> Top 5 Prompts by Usage
               </h3>
-              <div className="space-y-4">
-                {topPrompts.map((p: Prompt, i: number) => (
-                  <div key={p.id}>
-                    <div className="flex items-center justify-between text-sm mb-1.5">
-                      <Link to={`/prompt/${p.slug}`} className="font-medium text-ink hover:text-brand-dark transition-colors truncate max-w-[240px]">
-                        {i + 1}. {p.title}
-                      </Link>
-                      <span className="text-ink-soft shrink-0 ml-2">{p.popularity.toLocaleString()}</span>
-                    </div>
-                    <div className="h-2.5 rounded-full bg-white/60 overflow-hidden">
-                      <div className="h-full rounded-full bg-gradient-to-r from-brand to-brand-dark transition-all duration-700" style={{ width: `${(p.popularity / maxPopularity) * 100}%` }} />
-                    </div>
-                  </div>
-                ))}
+              <div className="flex-1 min-h-0 w-full">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={topPrompts} layout="vertical" margin={{ top: 0, right: 20, left: 0, bottom: 0 }}>
+                    <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="#e2e8f0" />
+                    <XAxis type="number" hide />
+                    <YAxis dataKey="name" type="category" width={120} tick={{ fontSize: 11, fill: '#64748b' }} axisLine={false} tickLine={false} />
+                    <Tooltip content={<CustomTooltip />} cursor={{ fill: 'rgba(139, 92, 246, 0.05)' }} />
+                    <Bar dataKey="Usage" fill="#8b5cf6" radius={[0, 4, 4, 0]} barSize={24} />
+                  </BarChart>
+                </ResponsiveContainer>
               </div>
             </div>
 
             {/* Prompts per Category */}
-            <div className="bg-white/50 backdrop-blur rounded-2xl p-6 border border-white/40">
+            <div className="bg-white/50 backdrop-blur rounded-2xl p-6 border border-white/40 flex flex-col h-[400px]">
               <h3 className="font-display font-semibold mb-6 flex items-center gap-2">
                 <Layers className="w-5 h-5 text-brand-dark" /> Prompts per Category
               </h3>
-              <div className="space-y-3">
-                {catData.map((cat) => (
-                  <div key={cat.slug}>
-                    <div className="flex items-center justify-between text-sm mb-1">
-                      <Link to={`/category/${cat.slug}`} className="font-medium text-ink hover:text-brand-dark transition-colors">{cat.name}</Link>
-                      <span className="text-ink-soft">{cat.count}</span>
-                    </div>
-                    <div className="h-2.5 rounded-full bg-white/60 overflow-hidden">
-                      <div className="h-full rounded-full bg-gradient-to-r from-brand-light to-brand transition-all duration-700" style={{ width: `${(cat.count / maxCatCount) * 100}%` }} />
-                    </div>
-                  </div>
-                ))}
+              <div className="flex-1 min-h-0 w-full">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={catData} margin={{ top: 10, right: 0, left: -20, bottom: 0 }}>
+                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
+                    <XAxis dataKey="name" tick={{ fontSize: 11, fill: '#64748b' }} axisLine={false} tickLine={false} />
+                    <YAxis tick={{ fontSize: 11, fill: '#64748b' }} axisLine={false} tickLine={false} />
+                    <Tooltip content={<CustomTooltip />} cursor={{ fill: 'rgba(139, 92, 246, 0.05)' }} />
+                    <Bar dataKey="Prompts" radius={[4, 4, 0, 0]} barSize={32}>
+                      {catData.map((_, index) => (
+                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                      ))}
+                    </Bar>
+                  </BarChart>
+                </ResponsiveContainer>
               </div>
             </div>
           </div>
 
           <div className="grid lg:grid-cols-2 gap-6">
             {/* Difficulty Distribution */}
-            <div className="bg-white/50 backdrop-blur rounded-2xl p-6 border border-white/40">
+            <div className="bg-white/50 backdrop-blur rounded-2xl p-6 border border-white/40 flex flex-col h-[400px]">
               <h3 className="font-display font-semibold mb-6 flex items-center gap-2">
                 <BarChart3 className="w-5 h-5 text-brand-dark" /> Difficulty Distribution
               </h3>
-              <div className="flex items-end justify-around gap-4 h-48">
-                {([
-                  { label: 'Beginner', count: diffCounts.Beginner, color: 'from-emerald-400 to-emerald-500', barColor: 'bg-gradient-to-t from-emerald-400 to-emerald-500', text: 'text-emerald-600' },
-                  { label: 'Intermediate', count: diffCounts.Intermediate, color: 'from-amber-400 to-amber-500', barColor: 'bg-gradient-to-t from-amber-400 to-amber-500', text: 'text-amber-600' },
-                  { label: 'Advanced', count: diffCounts.Advanced, color: 'from-rose-400 to-rose-500', barColor: 'bg-gradient-to-t from-rose-400 to-rose-500', text: 'text-rose-600' },
-                ] as const).map((d) => (
-                  <div key={d.label} className="flex flex-col items-center gap-2 flex-1 h-full justify-end">
-                    <span className={`text-sm font-bold ${d.text}`}>{d.count}</span>
-                    <span className="text-xs text-ink-soft">{Math.round((d.count / diffTotal) * 100)}%</span>
-                    <div className={`w-full max-w-[80px] rounded-t-xl ${d.barColor} transition-all duration-700`} style={{ height: `${(d.count / maxDiff) * 100}%` }} />
-                    <span className="text-xs font-medium text-ink-soft">{d.label}</span>
-                  </div>
-                ))}
+              <div className="flex-1 min-h-0 w-full relative">
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart>
+                    <Pie
+                      data={diffData}
+                      cx="50%"
+                      cy="50%"
+                      innerRadius={80}
+                      outerRadius={120}
+                      paddingAngle={5}
+                      dataKey="value"
+                      stroke="none"
+                    >
+                      {diffData.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={DIFF_COLORS[index % DIFF_COLORS.length]} />
+                      ))}
+                    </Pie>
+                    <Tooltip content={<CustomTooltip />} />
+                  </PieChart>
+                </ResponsiveContainer>
+                <div className="flex justify-center gap-6 mt-4">
+                  {diffData.map((d, i) => (
+                    <div key={d.name} className="flex items-center gap-2 text-sm text-ink-soft">
+                      <div className="w-3 h-3 rounded-full" style={{ backgroundColor: DIFF_COLORS[i % DIFF_COLORS.length] }} />
+                      {d.name}
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
 
             {/* Top Tags */}
-            <div className="bg-white/50 backdrop-blur rounded-2xl p-6 border border-white/40">
+            <div className="bg-white/50 backdrop-blur rounded-2xl p-6 border border-white/40 h-[400px]">
               <h3 className="font-display font-semibold mb-6 flex items-center gap-2">
                 <Eye className="w-5 h-5 text-brand-dark" /> Top Tags
               </h3>
               {topTags.length === 0 ? (
                 <p className="text-sm text-ink-soft text-center py-8">No tags yet</p>
               ) : (
-                <div className="flex flex-wrap gap-2">
+                <div className="flex flex-wrap gap-3">
                   {topTags.map(([tag, count]) => {
-                    const size = 0.85 + (count / maxTagCount) * 0.6;
+                    const size = 0.85 + (count / maxTagCount) * 0.8;
                     return (
-                      <span key={tag} className="chip bg-brand/10 text-brand-dark hover:bg-brand/20 transition-all cursor-default" style={{ fontSize: `${size}rem` }}>
-                        {tag}<span className="text-xs text-ink-soft ml-1">{count}</span>
+                      <span key={tag} className="chip bg-brand/10 text-brand-dark hover:bg-brand/20 transition-all cursor-default shadow-sm border border-brand/10" style={{ fontSize: `${size}rem` }}>
+                        {tag}<span className="text-xs text-brand-dark/70 ml-1 font-mono">{count}</span>
                       </span>
                     );
                   })}
