@@ -62,18 +62,6 @@ export default function Home() {
         <div className="absolute top-20 left-10 w-80 h-80 rounded-full bg-cyber-accent/5 blur-[100px] animate-float" />
         <div className="absolute top-40 right-10 w-96 h-96 rounded-full bg-cyber-secondary/5 blur-[100px] animate-float" style={{ animationDelay: '2s' }} />
         <div className="absolute bottom-20 left-1/3 w-64 h-64 rounded-full bg-cyber-tertiary/5 blur-[100px] animate-float" style={{ animationDelay: '4s' }} />
-
-        {/* Animated scanline beam */}
-        <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          <div className="absolute left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-cyber-accent/20 to-transparent animate-scanline" />
-        </div>
-
-        {/* Horizontal neon lines */}
-        <motion.div initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} transition={{ duration: 1.5, delay: 0.5 }}
-          className="absolute top-24 left-0 right-0 h-px bg-gradient-to-r from-transparent via-cyber-accent/10 to-transparent origin-left" />
-        <motion.div initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} transition={{ duration: 1.5, delay: 0.8 }}
-          className="absolute bottom-20 left-0 right-0 h-px bg-gradient-to-r from-transparent via-cyber-secondary/10 to-transparent origin-right" />
-
         {/* Floating corner brackets */}
         <div className="absolute top-32 left-8 text-cyber-accent/20 font-mono text-6xl animate-pulse-soft hidden lg:block">[</div>
         <div className="absolute top-32 right-8 text-cyber-accent/20 font-mono text-6xl animate-pulse-soft hidden lg:block">]</div>
