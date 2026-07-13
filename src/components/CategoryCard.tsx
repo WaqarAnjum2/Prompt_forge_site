@@ -12,19 +12,21 @@ export default function CategoryCard({ category }: { category: Category }) {
   return (
     <Link
       to={`/category/${category.slug}`}
-      className="group glass rounded-3xl p-6 flex flex-col items-center text-center gap-3 hover:shadow-xl hover:shadow-brand/20 hover:-translate-y-1 transition-all duration-300"
+      className="group cyber-card cyber-chamfer p-6 flex flex-col items-center text-center gap-4"
     >
-      <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-brand-light to-brand flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-        <DynamicIcon name={category.icon} className="w-7 h-7 text-white" />
+      <div className="w-14 h-14 border border-cyber-accent/30 flex items-center justify-center cyber-chamfer group-hover:border-cyber-accent group-hover:shadow-[0_0_15px_#00ff88,0_0_30px_#00ff8830] transition-all duration-300">
+        <DynamicIcon name={category.icon} className="w-7 h-7 text-cyber-accent group-hover:drop-shadow-[0_0_6px_#00ff88] transition-all" />
       </div>
-      <h3 className="font-display font-semibold group-hover:text-brand-dark transition-colors">
-        {category.name}
-      </h3>
-      {category.description && (
-        <p className="text-sm text-ink-soft line-clamp-2 leading-relaxed">
-          {category.description}
-        </p>
-      )}
+      <div>
+        <h3 className="font-cyber font-bold text-sm uppercase tracking-wider text-cyber-fg group-hover:text-cyber-accent transition-colors">
+          {category.name}
+        </h3>
+        {category.description && (
+          <p className="text-xs text-cyber-fg-soft line-clamp-2 leading-relaxed mt-1.5 font-mono">
+            {category.description}
+          </p>
+        )}
+      </div>
     </Link>
   );
 }

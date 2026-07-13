@@ -1,25 +1,27 @@
 export function Loading({ label = 'Loading' }: { label?: string }) {
   return (
     <div className="flex flex-col items-center justify-center py-24 gap-4">
-      <div className="relative flex items-center justify-center">
-        <div className="w-16 h-16 rounded-full border-4 border-brand/20 border-t-brand animate-spin absolute" />
-        <img src="/logo.png" alt="Loading" className="w-8 h-8 rounded-lg object-cover" />
+      <div className="relative w-16 h-16">
+        <div className="absolute inset-0 border-2 border-cyber-accent/20 border-t-cyber-accent animate-spin cyber-chamfer" />
+        <div className="absolute inset-3 border border-cyber-secondary/20 border-b-cyber-secondary animate-spin cyber-chamfer" style={{ animationDirection: 'reverse', animationDuration: '1.5s' }} />
       </div>
-      <p className="text-sm text-ink-soft animate-pulse">{label}…</p>
+      <p className="text-xs text-cyber-accent font-mono uppercase tracking-[0.2em] animate-pulse">
+        {label}<span className="animate-blink">_</span>
+      </p>
     </div>
   );
 }
 
 export function SkeletonCard() {
   return (
-    <div className="glass rounded-3xl p-6 space-y-4">
-      <div className="skeleton h-6 w-24 rounded-full" />
-      <div className="skeleton h-5 w-3/4" />
-      <div className="skeleton h-4 w-full" />
-      <div className="skeleton h-4 w-2/3" />
+    <div className="cyber-card cyber-chamfer p-6 space-y-4">
+      <div className="cyber-skeleton h-6 w-24" />
+      <div className="cyber-skeleton h-5 w-3/4" />
+      <div className="cyber-skeleton h-4 w-full" />
+      <div className="cyber-skeleton h-4 w-2/3" />
       <div className="flex gap-2 pt-2">
-        <div className="skeleton h-6 w-16 rounded-full" />
-        <div className="skeleton h-6 w-16 rounded-full" />
+        <div className="cyber-skeleton h-6 w-16" />
+        <div className="cyber-skeleton h-6 w-16" />
       </div>
     </div>
   );
@@ -40,10 +42,7 @@ export function useAsync<T>(fn: () => Promise<T>, deps: unknown[] = []) {
     setLoading(true);
     fn()
       .then((result) => {
-        if (active) {
-          setData(result);
-          setError(null);
-        }
+        if (active) { setData(result); setError(null); }
       })
       .catch((err) => {
         if (active) setError(err.message ?? 'Something went wrong');
@@ -51,9 +50,7 @@ export function useAsync<T>(fn: () => Promise<T>, deps: unknown[] = []) {
       .finally(() => {
         if (active) setLoading(false);
       });
-    return () => {
-      active = false;
-    };
+    return () => { active = false; };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [...deps, reloadCount]);
 

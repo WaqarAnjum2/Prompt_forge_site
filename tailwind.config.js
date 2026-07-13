@@ -4,25 +4,31 @@ export default {
   theme: {
     extend: {
       colors: {
-        bg: {
-          DEFAULT: '#FBEFEF',
-          surface: '#FFE2E2',
-          elevated: '#F5CBCB',
+        // Cyberpunk palette
+        cyber: {
+          bg: '#0a0a0f',
+          card: '#12121a',
+          muted: '#1c1c2e',
+          border: '#2a2a3a',
+          fg: '#e0e0e0',
+          'fg-soft': '#6b7280',
+          accent: '#00ff88',
+          secondary: '#ff00ff',
+          tertiary: '#00d4ff',
+          danger: '#ff3366',
         },
-        brand: {
-          light: '#D4C4E0',
-          DEFAULT: '#C5B3D3',
-          dark: '#9B7DB0',
-        },
-        ink: {
-          DEFAULT: '#1F2937',
-          soft: '#6B7280',
-        },
+        // Legacy palette (admin pages)
+        bg: { DEFAULT: '#FBEFEF', surface: '#FFE2E2', elevated: '#F5CBCB' },
+        brand: { light: '#D4C4E0', DEFAULT: '#C5B3D3', dark: '#9B7DB0' },
+        ink: { DEFAULT: '#1F2937', soft: '#6B7280' },
         success: '#10B981',
         warning: '#F59E0B',
         danger: '#EF4444',
       },
       fontFamily: {
+        cyber: ['"Orbitron"', '"Share Tech Mono"', 'monospace'],
+        mono: ['"JetBrains Mono"', '"Fira Code"', 'monospace'],
+        'cyber-label': ['"Share Tech Mono"', 'monospace'],
         display: ['Inter', 'sans-serif'],
         body: ['Roboto', 'sans-serif'],
       },
@@ -34,42 +40,57 @@ export default {
         body: ['16px', { lineHeight: '1.5' }],
         caption: ['12px', { lineHeight: '1.4' }],
       },
-      borderRadius: {
-        '4xl': '2rem',
-      },
+      borderRadius: { '4xl': '2rem' },
       animation: {
-        'fade-in': 'fadeIn 0.4s ease-out',
-        'fade-up': 'fadeUp 0.4s ease-out',
-        'fade-down': 'fadeDown 0.4s ease-out',
-        'scale-in': 'scaleIn 0.3s ease-out',
+        'fade-in': 'fadeIn 0.5s ease-out both',
+        'fade-up': 'fadeUp 0.5s ease-out both',
+        'fade-down': 'fadeDown 0.5s ease-out both',
+        'scale-in': 'scaleIn 0.4s ease-out both',
         'float': 'float 6s ease-in-out infinite',
         'shimmer': 'shimmer 2s linear infinite',
+        'marquee': 'marquee 30s linear infinite',
+        // Cyberpunk animations
+        'glitch': 'glitch 3s infinite',
+        'blink': 'blink 1s step-end infinite',
+        'scanline': 'scanline 8s linear infinite',
+        'rgb-shift': 'rgbShift 4s ease-in-out infinite',
+        'glow-pulse': 'glowPulse 3s ease-in-out infinite',
+        'cyber-flicker': 'cyberFlicker 0.15s infinite',
+        'pulse-soft': 'pulseSoft 3s ease-in-out infinite',
+        'gradient-x': 'gradientX 6s ease infinite',
       },
       keyframes: {
-        fadeIn: {
-          '0%': { opacity: '0' },
+        fadeIn: { '0%': { opacity: '0' }, '100%': { opacity: '1' } },
+        fadeUp: { '0%': { opacity: '0', transform: 'translateY(20px)' }, '100%': { opacity: '1', transform: 'translateY(0)' } },
+        fadeDown: { '0%': { opacity: '0', transform: 'translateY(-12px)' }, '100%': { opacity: '1', transform: 'translateY(0)' } },
+        scaleIn: { '0%': { opacity: '0', transform: 'scale(0.9)' }, '100%': { opacity: '1', transform: 'scale(1)' } },
+        float: { '0%, 100%': { transform: 'translateY(0)' }, '50%': { transform: 'translateY(-20px)' } },
+        shimmer: { '0%': { backgroundPosition: '-200% 0' }, '100%': { backgroundPosition: '200% 0' } },
+        marquee: { '0%': { transform: 'translateX(0%)' }, '100%': { transform: 'translateX(-50%)' } },
+        glitch: {
+          '0%, 100%': { transform: 'translate(0)' },
+          '20%': { transform: 'translate(-2px, 2px)' },
+          '40%': { transform: 'translate(2px, -2px)' },
+          '60%': { transform: 'translate(-1px, -1px)' },
+          '80%': { transform: 'translate(1px, 1px)' },
+        },
+        blink: { '50%': { opacity: '0' } },
+        scanline: { '0%': { transform: 'translateY(-100%)' }, '100%': { transform: 'translateY(100vh)' } },
+        rgbShift: {
+          '0%, 100%': { textShadow: '-2px 0 #ff00ff, 2px 0 #00d4ff' },
+          '50%': { textShadow: '2px 0 #ff00ff, -2px 0 #00d4ff' },
+        },
+        glowPulse: {
+          '0%, 100%': { boxShadow: '0 0 5px #00ff88, 0 0 10px #00ff8840' },
+          '50%': { boxShadow: '0 0 10px #00ff88, 0 0 30px #00ff8860, 0 0 50px #00ff8830' },
+        },
+        cyberFlicker: {
+          '0%': { opacity: '1' },
+          '50%': { opacity: '0.8' },
           '100%': { opacity: '1' },
         },
-        fadeUp: {
-          '0%': { opacity: '0', transform: 'translateY(12px)' },
-          '100%': { opacity: '1', transform: 'translateY(0)' },
-        },
-        fadeDown: {
-          '0%': { opacity: '0', transform: 'translateY(-12px)' },
-          '100%': { opacity: '1', transform: 'translateY(0)' },
-        },
-        scaleIn: {
-          '0%': { opacity: '0', transform: 'scale(0.95)' },
-          '100%': { opacity: '1', transform: 'scale(1)' },
-        },
-        float: {
-          '0%, 100%': { transform: 'translateY(0)' },
-          '50%': { transform: 'translateY(-20px)' },
-        },
-        shimmer: {
-          '0%': { backgroundPosition: '-200% 0' },
-          '100%': { backgroundPosition: '200% 0' },
-        },
+        pulseSoft: { '0%, 100%': { opacity: '1' }, '50%': { opacity: '0.7' } },
+        gradientX: { '0%, 100%': { backgroundPosition: '0% 50%' }, '50%': { backgroundPosition: '100% 50%' } },
       },
     },
   },

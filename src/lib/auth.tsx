@@ -74,7 +74,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [tokenExpired, setTokenExpired] = useState(false);
 
   const updateState = useCallback(
-    (session: Session | null) => {
+    async (session: Session | null) => {
       setSession(session);
       setUser(session?.user ?? null);
       const token = session?.access_token ?? null;
@@ -82,14 +82,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const claims = token ? decodeJwt(token) : null;
       setJwtClaims(claims);
       setTokenExpired(isTokenExpired(claims));
-      checkAdmin(session?.user ?? null);
+      await checkAdmin(session?.user ?? null);
     },
     []
   );
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      updateState(session);
+    supabase.auth.getSession().then(async ({ data: { session } }) => {
+      await updateState(session);
       setLoading(false);
     });
 

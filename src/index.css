@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ===== BASE ===== */
 @layer base {
   body {
     @apply bg-bg text-ink font-body antialiased;
@@ -10,75 +11,208 @@
       radial-gradient(ellipse 60% 40% at 80% 100%, rgba(245, 203, 203, 0.2), transparent);
     background-attachment: fixed;
   }
+  h1, h2, h3, h4 { @apply font-display; }
+  ::selection { @apply bg-brand/30 text-ink; }
 
-  h1, h2, h3, h4 {
-    @apply font-display;
+  /* Cyberpunk body override (applied via .cyber-page wrapper) */
+  .cyber-page {
+    background: #0a0a0f;
+    color: #e0e0e0;
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+    background-image:
+      linear-gradient(rgba(0, 255, 136, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0, 255, 136, 0.03) 1px, transparent 1px);
+    background-size: 50px 50px;
+  }
+  .cyber-page h1, .cyber-page h2, .cyber-page h3, .cyber-page h4 {
+    font-family: 'Orbitron', 'Share Tech Mono', monospace;
+  }
+  .cyber-page ::selection {
+    background: rgba(0, 255, 136, 0.3);
+    color: #e0e0e0;
   }
 }
 
+/* ===== COMPONENTS ===== */
 @layer components {
-  .glass {
-    @apply bg-white/40 backdrop-blur-md border border-white/30 shadow-sm;
+  /* --- Legacy (admin) --- */
+  .glass { @apply bg-white/40 backdrop-blur-md border border-white/30 shadow-sm; }
+  .glass-strong { @apply bg-white/60 backdrop-blur-xl border border-white/40 shadow-lg; }
+  .pill-btn { @apply inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-full font-medium text-sm transition-all duration-300; }
+  .pill-btn-primary { @apply pill-btn bg-brand text-white hover:bg-brand-dark shadow-lg shadow-brand/30 hover:shadow-brand/40 hover:-translate-y-0.5 active:scale-95; }
+  .pill-btn-ghost { @apply pill-btn bg-white/40 text-ink hover:bg-white/60 border border-white/30 hover:-translate-y-0.5 active:scale-95; }
+  .pill-btn-danger { @apply pill-btn bg-danger text-white hover:bg-danger/90 active:scale-95; }
+  .chip { @apply inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium transition-all; }
+  .input-field { @apply w-full glass rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-brand/30 transition-all placeholder:text-ink-soft/60; }
+  .skeleton { @apply bg-gradient-to-r from-bg-surface via-bg-elevated to-bg-surface bg-[length:200%_100%] animate-shimmer rounded-xl; }
+  .section-heading { @apply text-h2 font-display font-bold mb-2 tracking-tight; }
+  .section-subheading { @apply text-ink-soft text-base max-w-2xl; }
+
+  /* --- Cyberpunk --- */
+
+  /* Chamfered corners */
+  .cyber-chamfer {
+    clip-path: polygon(
+      0 10px, 10px 0,
+      calc(100% - 10px) 0, 100% 10px,
+      100% calc(100% - 10px), calc(100% - 10px) 100%,
+      10px 100%, 0 calc(100% - 10px)
+    );
+  }
+  .cyber-chamfer-sm {
+    clip-path: polygon(
+      0 6px, 6px 0,
+      calc(100% - 6px) 0, 100% 6px,
+      100% calc(100% - 6px), calc(100% - 6px) 100%,
+      6px 100%, 0 calc(100% - 6px)
+    );
   }
 
-  .glass-strong {
-    @apply bg-white/60 backdrop-blur-xl border border-white/40 shadow-lg;
+  /* Neon card */
+  .cyber-card {
+    @apply relative;
+    background: #12121a;
+    border: 1px solid #2a2a3a;
+    transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .cyber-card:hover {
+    border-color: #00ff88;
+    transform: translateY(-2px);
+    box-shadow: 0 0 5px #00ff88, 0 0 10px #00ff8840;
   }
 
-  .pill-btn {
-    @apply inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-full font-medium text-sm transition-all duration-200;
+  /* Cyber buttons */
+  .cyber-btn {
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3 font-mono text-sm uppercase tracking-widest transition-all;
+    border: 2px solid #00ff88;
+    color: #00ff88;
+    background: transparent;
+  }
+  .cyber-btn:hover {
+    background: #00ff88;
+    color: #0a0a0f;
+    box-shadow: 0 0 10px #00ff88, 0 0 20px #00ff8860;
+  }
+  .cyber-btn-solid {
+    @apply cyber-btn;
+    background: #00ff88;
+    color: #0a0a0f;
+    font-weight: 700;
+  }
+  .cyber-btn-solid:hover {
+    filter: brightness(1.15);
+    box-shadow: 0 0 10px #00ff88, 0 0 20px #00ff8860, 0 0 40px #00ff8830;
+  }
+  .cyber-btn-secondary {
+    @apply cyber-btn;
+    border-color: #ff00ff;
+    color: #ff00ff;
+  }
+  .cyber-btn-secondary:hover {
+    background: #ff00ff;
+    color: #0a0a0f;
+    box-shadow: 0 0 10px #ff00ff, 0 0 20px #ff00ff60;
+  }
+  .cyber-btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3 font-mono text-sm uppercase tracking-widest transition-all;
+    border: 1px solid #2a2a3a;
+    color: #e0e0e0;
+    background: transparent;
+  }
+  .cyber-btn-ghost:hover {
+    border-color: #00ff88;
+    color: #00ff88;
+    box-shadow: 0 0 5px #00ff88, 0 0 10px #00ff8840;
   }
 
-  .pill-btn-primary {
-    @apply pill-btn bg-brand text-white hover:bg-brand-dark shadow-lg shadow-brand/30 hover:shadow-brand/40 hover:-translate-y-0.5;
+  /* Cyber input */
+  .cyber-input {
+    @apply w-full px-4 py-3 pl-8 text-sm font-mono outline-none transition-all;
+    background: #12121a;
+    border: 1px solid #2a2a3a;
+    color: #00ff88;
+  }
+  .cyber-input::placeholder { color: #6b7280; }
+  .cyber-input:focus {
+    border-color: #00ff88;
+    box-shadow: 0 0 5px #00ff88, 0 0 10px #00ff8840;
   }
 
-  .pill-btn-ghost {
-    @apply pill-btn bg-white/40 text-ink hover:bg-white/60 border border-white/30;
+  /* Cyber chip */
+  .cyber-chip {
+    @apply inline-flex items-center gap-1.5 px-3 py-1 text-xs font-mono uppercase tracking-wider transition-all;
+    background: rgba(0, 255, 136, 0.1);
+    color: #00ff88;
+    border: 1px solid rgba(0, 255, 136, 0.2);
   }
 
-  .pill-btn-danger {
-    @apply pill-btn bg-danger text-white hover:bg-danger/90;
+  /* Glitch text effect */
+  .cyber-glitch {
+    position: relative;
+    animation: glitch 3s infinite;
+  }
+  .cyber-glitch::before,
+  .cyber-glitch::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+  .cyber-glitch::before {
+    color: #ff00ff;
+    clip-path: inset(0 0 60% 0);
+    transform: translate(-2px, -1px);
+    animation: glitch 2s infinite reverse;
+  }
+  .cyber-glitch::after {
+    color: #00d4ff;
+    clip-path: inset(60% 0 0 0);
+    transform: translate(2px, 1px);
+    animation: glitch 2.5s infinite;
   }
 
-  .chip {
-    @apply inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium transition-all;
+  /* Scanline overlay */
+  .cyber-scanlines::after {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    pointer-events: none;
+    z-index: 9999;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0, 0, 0, 0.15) 2px,
+      rgba(0, 0, 0, 0.15) 4px
+    );
   }
 
-  .input-field {
-    @apply w-full glass rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-brand/30 transition-all placeholder:text-ink-soft/60;
-  }
+  /* Neon text glow */
+  .text-neon { color: #00ff88; text-shadow: 0 0 10px rgba(0, 255, 136, 0.5); }
+  .text-neon-secondary { color: #ff00ff; text-shadow: 0 0 10px rgba(255, 0, 255, 0.5); }
+  .text-neon-tertiary { color: #00d4ff; text-shadow: 0 0 10px rgba(0, 212, 255, 0.5); }
 
-  .skeleton {
-    @apply bg-gradient-to-r from-bg-surface via-bg-elevated to-bg-surface bg-[length:200%_100%] animate-shimmer rounded-xl;
+  /* Skeleton for cyber */
+  .cyber-skeleton {
+    background: linear-gradient(90deg, #1c1c2e 25%, #2a2a3a 50%, #1c1c2e 75%);
+    background-size: 200% 100%;
+    animation: shimmer 2s linear infinite;
   }
 }
 
+/* ===== UTILITIES ===== */
 @layer utilities {
-  .scrollbar-hide {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-  }
-  .scrollbar-hide::-webkit-scrollbar {
-    display: none;
-  }
-  .line-clamp-2 {
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
-  .line-clamp-3 {
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
-  @keyframes marquee {
-    0% { transform: translateX(0%); }
-    100% { transform: translateX(-50%); }
-  }
-  .animate-marquee {
-    animation: marquee 30s linear infinite;
-  }
+  .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+  .scrollbar-hide::-webkit-scrollbar { display: none; }
+  .line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .line-clamp-3 { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+  html { scroll-behavior: smooth; }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .cyber-glitch, .cyber-glitch::before, .cyber-glitch::after { animation: none !important; }
+  .cyber-scanlines::after { display: none; }
 }
