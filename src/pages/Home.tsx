@@ -55,9 +55,9 @@ export default function Home() {
   };
 
   return (
-    <div className="cyber-page cyber-scanlines min-h-screen">
+    <div className="cyber-page cyber-scanlines min-h-screen" style={{ backgroundImage: 'none' }}>
       {/* Hero */}
-      <section className="relative overflow-hidden pt-28 md:pt-36 pb-16 md:pb-24">
+      <section className="relative overflow-hidden pt-28 md:pt-36 pb-16 md:pb-24 bg-[var(--cyber-bg)]">
         {/* Decorative glows */}
         <div className="absolute top-20 left-10 w-80 h-80 rounded-full bg-cyber-accent/5 blur-[100px] animate-float" />
         <div className="absolute top-40 right-10 w-96 h-96 rounded-full bg-cyber-secondary/5 blur-[100px] animate-float" style={{ animationDelay: '2s' }} />
